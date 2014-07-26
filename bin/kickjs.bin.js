@@ -16,7 +16,7 @@ for (var i = 0; i < process.argv.length; i++) {
 
 function k() {
   console.log(clc.reset);
-  console.log(clc.green('kick ') + pkg.version);
+  console.log(clc.green('kickJS ') + pkg.version);
 }
 
 if (args['--version']) {
@@ -27,7 +27,7 @@ if (args['--version']) {
   var namespace = args.init.split(':')[1];
 
   if (namespace === undefined || namespace === '') {
-    return console.log('  ✗', clc.red('please specify project name.'), clc.cyan('$ kick init:[NAME]'));
+    return console.log('  ✗', clc.red('please specify project name.'), clc.cyan('$ kickJS init:[NAME]'));
   }
 
   templatePath = path.join(__dirname, '..', 'template', 'project');

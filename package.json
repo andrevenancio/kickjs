@@ -1,16 +1,19 @@
 {
-  "name": "kick",
+  "name": "kickjs",
   "preferGlobal": true,
   "version": "0.0.1",
   "author": "Andre Venancio <info@andrevenancio.com>",
   "description": "Boilerplate template for grunt, sass and coffeescript",
   "bin": {
-    "kick": "./bin/kick.bin.js"
+    "kickjs": "./bin/kickjs.bin.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": "https://github.com/andrevenancio/kick",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrevenancio/kickjs"
+  },
   "license": "MIT",
   "dependencies": {
     "ncp": "~0.5.0",
