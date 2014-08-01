@@ -1,7 +1,7 @@
 {
   "name": "kickjs",
   "preferGlobal": true,
-  "version": "0.0.2-beta",
+  "version": "0.0.2-beta-c",
   "author": "Andre Venancio <info@andrevenancio.com>",
   "description": "Boilerplate template for grunt, sass and coffeescript",
   "bin": {

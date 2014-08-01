@@ -1,0 +1,14 @@
+{
+    "name": "template",
+    "version": "0.0.1",
+    "description": "",
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-contrib-watch": "~0.5.2",
+        "grunt-coffee-percolator-v2": "~0.2.4"
+    }
+}
