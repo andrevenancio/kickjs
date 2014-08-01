@@ -11,8 +11,6 @@ npm install -g kickjs
 ```
 
 ###Create new projects
-
-Create a new folder, and from inside that folder run:
 ```shell
-kickjs init:[your_project_name]
+kickjs -i:[your_project_name]
 ```
