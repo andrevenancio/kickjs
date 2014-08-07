@@ -1,7 +1,7 @@
 {
   "name": "kickjs",
   "preferGlobal": true,
-  "version": "0.0.2-beta-c",
+  "version": "1.0.0",
   "author": "Andre Venancio <info@andrevenancio.com>",
   "description": "Boilerplate template for grunt, sass and coffeescript",
   "bin": {
@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "ncp": "~0.5.0",
-    "cli-color": "~0.2.3"
+    "cli-color": "~0.2.3",
+    "walk": "2.3.3"
   }
 }

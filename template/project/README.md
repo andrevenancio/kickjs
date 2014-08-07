@@ -1,2 +1,3 @@
-template
+__NAMESPACE__ __VERSION__
 ====
+__DESCRIPTION__

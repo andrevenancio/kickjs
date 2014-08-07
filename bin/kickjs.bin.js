@@ -7,9 +7,11 @@ var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
 var ncp = require('ncp');
+var walk = require('walk');
 
 var interval = null;
 var i = 0;
+var namespace = '';
 
 var args = {};
 for (var i = 0; i < process.argv.length; i++) {
@@ -18,9 +20,14 @@ for (var i = 0; i < process.argv.length; i++) {
 }
 
 if (args['-i']) {
+  var namespace = args['-i'].split(':')[1];
   init();
 } else if (args['-v']) {
   log.info(pkg.version);
+} else if (args['-h']) {
+  log.info('Help:')
+  log.info('-v', 'displays current version')
+  log.info('-i', 'creates new project.\n e.g.: $ kickjs:PROJECT_NAME:PROJECT_DESCRIPTION[OPTIONAL]:PROJECT_VERSION[OPTIONAL]');
 }
 
 function credits() {
@@ -29,18 +36,31 @@ function credits() {
 }
 
 function init() {
-  copyTemplate();
+  copyTemplate(function() {
+    log.success('template copied');
+    updateFileReferences(function() {
+      log.success('file references changed');
+      copyStaticFiles(function() {
+        log.success('static files copied');
+        installNpmDependencies(function() {
+          log.success('npm dependencies installed');
+          log.info('\nSetup complete. Please run grunt within the selected namespace');
+        });
+      });
+    })
+  });
 }
 
-function copyTemplate() {
-  var namespace = args['-i'].split(':')[1];
-
+function copyTemplate(onComplete) {
   if (namespace === undefined || namespace === '') {
     return log.fail('please specify a namespace');
   }
 
   if (fs.existsSync(namespace)) {
-    return log.fail('specified namespace already exist');
+    log.fail('specified namespace already exist, deleting');
+    return bash('rm -rf ' + namespace, function() {
+      copyTemplate(onComplete);
+    });
   } else {
     credits();
 
@@ -51,20 +71,65 @@ function copyTemplate() {
         if (error) {
           log.fail(error);
         } else {
-          log.success('template copied to', namespace);
-          
-          showLoading('please wait');
-          bash('npm install --prefix ./' + namespace, function() {
-            hideLoading();
-            log.success('node_modules installed');
-            log.info('\ntype:\ncd', namespace, '\ngrunt app');
-          });
+          onComplete()
         }
       });
     } else {
       log.fail('couldn\'t find template');
     }
   }
+}
+
+function installNpmDependencies(onComplete) {
+  showLoading('please wait');
+  bash('npm install --prefix ./' + namespace, function() {
+    hideLoading();
+    onComplete();
+  });
+}
+
+function updateFileReferences(onComplete) {
+  var files = 0;
+
+  var walker = walk.walk('./' + namespace, { followLinks: false, filters: ['node_modules'] });
+
+  walker.on('file', function(root, fileStats, next) {
+    parseFile(root + '/' + fileStats.name, {
+      namespace: namespace,
+      description: args['-i'].split(':')[2] || 'project template',
+      version: args['-i'].split(':')[3] || '1.0.0'
+    });
+    files++;
+    next();
+  });
+
+  walker.on('end', function() {
+    onComplete();
+  });
+}
+
+function parseFile(file, references) {  
+  fs.readFile(file, 'utf8', function(err, data) {
+    if (err) return log.failt(err);
+
+    var result = data.replace(/__NAMESPACE__/g, references.namespace)
+    .replace(/__DESCRIPTION__/g, references.description)
+    .replace(/__VERSION__/g, references.version)
+
+    fs.writeFile(file, result, 'utf8', function (err) {
+      if (err) return log.fail(err);
+    });
+  });
+}
+
+function copyStaticFiles(onComplete) {
+  var dir = './' + namespace;
+  bash('mkdir ' + namespace + '/website', function() {
+    fs.rename(dir + '/static', dir + '/website', function (err) {
+      if (err) return log.fail(err);
+      onComplete();
+    });
+  });
 }
 
 function showLoading(message) {
@@ -87,10 +152,10 @@ function hideLoading() {
   process.stdout.cursorTo(0);
 }
 
-function bash(script, onSuccess, onError) {
+function bash(script, onSuccess) {
   child_process.exec(script, function(error, stdout, stderr) {
     if (error) {
-      return onError();
+      return log.fail(error);
     } else {
       return onSuccess();
     }

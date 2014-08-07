@@ -1,7 +1,7 @@
 {
-    "name": "template",
-    "version": "0.0.1",
-    "description": "",
+    "name": "__NAMESPACE__",
+    "version": "__VERSION__",
+    "description": "__DESCRIPTION__",
     "repository": {
         "type": "git",
         "url": ""
@@ -9,6 +9,7 @@
     "devDependencies": {
         "grunt": "~0.4.1",
         "grunt-contrib-watch": "~0.5.2",
-        "grunt-coffee-percolator-v2": "~0.2.4"
+        "grunt-coffee-percolator-v2": "~0.2.4",
+        "grunt-contrib-sass": "~0.7.3"
     }
 }

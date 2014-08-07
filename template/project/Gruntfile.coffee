@@ -1,25 +1,33 @@
 module.exports = (grunt) ->
-  grunt.initConfig
+    grunt.initConfig
 
-    #watch for changes in files
-    watch:
-      app:
-        files: ['Gruntfile.coffee', 'coffee/app/*coffee', 'coffee/app/**/*.coffee']
-        tasks: ['percolator:app']
+        #watch for changes in files
+        watch:
+            app:
+                files: ['Gruntfile.coffee', 'coffee/*coffee', 'coffee/**/*.coffee', 'sass/*.sass']
+                tasks: ['percolator:app', 'sass:app']
 
-    #compile coffee files
-    percolator:
-      app:
-        source: 'coffee'
-        output: 'website/js/app.js'
-        main: 'App.coffee'
-        compile: true
-        opts: "--bare"
+        #compile coffee files
+        percolator:
+            app:
+                source: 'coffee'
+                output: 'website/js/app.js'
+                main: 'App.coffee'
+                compile: true
+                opts: "--bare"
 
-  grunt.loadNpmTasks 'grunt-coffee-percolator-v2'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
+        #compile sass files
+        sass:
+            dist:
+                options:
+                    noCache: false
+            app:
+                files:
+                    'website/css/style.css': 'sass/style.sass'  
 
-  grunt.registerTask 'default', ->
-    console.log 'failing gracefully. please specify grunt task needed'
+    grunt.loadNpmTasks 'grunt-coffee-percolator-v2'
+    grunt.loadNpmTasks 'grunt-contrib-watch'
+    grunt.loadNpmTasks 'grunt-contrib-sass'
 
-  grunt.registerTask 'app', ['percolator:app', 'watch:app']
+    grunt.registerTask 'default', ['percolator:app', 'sass:app']
+    grunt.registerTask 'app', ['percolator:app', 'sass:app', 'watch:app']
