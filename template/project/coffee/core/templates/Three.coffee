@@ -1,26 +1,47 @@
 #import core.templates.Debug
 class Three extends Debug
 
+    ambient:
+        color: 0x000000
+    directional:
+        color: 0xffffff
+        intensity: 1.0
+    flash:
+        connected: false
+        color: 0xdddddd
+        intensity: 0.3
+        distance: 0.0
+    fog:
+        color: 0x000000
+        near: 1,
+        far: 1000
+
     constructor: ->
         super()
 
         @renderer = new THREE.WebGLRenderer()
+    
         @canvas = @renderer.domElement
         document.body.appendChild @canvas
 
         @scene = new THREE.Scene()
-        @scene.fog = new THREE.Fog 0x000000, 1, 700
+        @scene.fog = new THREE.Fog @fog.color, @fog.near, @fog.far
         
         @camera = new THREE.PerspectiveCamera 45, 4/3, 1, 3000
         @camera.lookAt @scene.position
         @scene.add @camera
 
-        @ambient = new THREE.AmbientLight 0x000000
-        @scene.add @ambient
+        @light_ambient = new THREE.AmbientLight @ambient.color
+        @scene.add @light_ambient
 
-        @light = new THREE.PointLight 0xffffff
-        @light.position.set 0, 500, 0
-        @scene.add @light
+        @light_directional = new THREE.PointLight 0xffffff
+        @light_directional.position.set 0, 100, 0
+        @scene.add @light_directional
+
+        @light_camera = new THREE.SpotLight @flash.color, @flash.intensity, @flash.distance
+        if not @flash.connected
+            @light_camera.intensity = 0
+        @scene.add @light_camera
 
         window.addEventListener 'resize', @onResize, false
 
@@ -44,6 +65,9 @@ class Three extends Debug
 
     render: =>
         @update()
+        
+        @light_camera.position.copy @camera.position
+
         @renderer.render @scene, @camera
         requestAnimationFrame @render       
         null

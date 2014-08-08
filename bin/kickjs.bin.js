@@ -24,11 +24,11 @@ if (args['-i']) {
   init();
 } else if (args['-v']) {
   log.info(pkg.version);
-} else if (args['-h']) {
+} else {
   log.info('Help:')
   log.info('-v', 'displays current version')
-  log.info('-i', 'creates new project.\n e.g.: $ kickjs:PROJECT_NAME:PROJECT_DESCRIPTION[OPTIONAL]:PROJECT_VERSION[OPTIONAL]');
-}
+  log.info('-i', 'creates new project. e.g.: $ kickjs:PROJECT_NAME:PROJECT_DESCRIPTION[OPTIONAL]:PROJECT_VERSION[OPTIONAL]');
+} 
 
 function credits() {
   log.clear();
@@ -36,16 +36,20 @@ function credits() {
 }
 
 function init() {
+  credits();
+
   copyTemplate(function() {
     log.success('template copied');
     updateFileReferences(function() {
       log.success('file references changed');
       copyStaticFiles(function() {
         log.success('static files copied');
+        /*
         installNpmDependencies(function() {
           log.success('npm dependencies installed');
           log.info('\nSetup complete. Please run grunt within the selected namespace');
         });
+      */
       });
     })
   });
@@ -57,13 +61,11 @@ function copyTemplate(onComplete) {
   }
 
   if (fs.existsSync(namespace)) {
-    log.fail('specified namespace already exist, deleting');
-    return bash('rm -rf ' + namespace, function() {
+    log.fail('specified namespace already exist, overriding folder');
+    return bash('rm -rf ' + namespace.replace(/ /g, "\\ ") + '/', function() {
       copyTemplate(onComplete);
     });
   } else {
-    credits();
-
     var templatePath = path.join(__dirname, '..', 'template', 'project');
 
     if (fs.existsSync(templatePath)) {
@@ -123,13 +125,13 @@ function parseFile(file, references) {
 }
 
 function copyStaticFiles(onComplete) {
-  var dir = './' + namespace;
-  bash('mkdir ' + namespace + '/website', function() {
-    fs.rename(dir + '/static', dir + '/website', function (err) {
+  bash('mkdir ' + namespace.replace(/ /g, "\\ ") + '/website', function() {
+    fs.rename('./' + namespace + '/static/', './' + namespace + '/website/', function (err) {
       if (err) return log.fail(err);
       onComplete();
     });
   });
+
 }
 
 function showLoading(message) {
