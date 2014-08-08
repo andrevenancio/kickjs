@@ -44,12 +44,9 @@ function init() {
       log.success('file references changed');
       copyStaticFiles(function() {
         log.success('static files copied');
-        /*
         installNpmDependencies(function() {
           log.success('npm dependencies installed');
-          log.info('\nSetup complete. Please run grunt within the selected namespace');
         });
-      */
       });
     })
   });
@@ -84,7 +81,7 @@ function copyTemplate(onComplete) {
 
 function installNpmDependencies(onComplete) {
   showLoading('please wait');
-  bash('npm install --prefix ./' + namespace, function() {
+  bash('npm install --prefix ./' + namespace.replace(/ /g, "\\ "), function() {
     hideLoading();
     onComplete();
   });
@@ -96,8 +93,9 @@ function updateFileReferences(onComplete) {
   var walker = walk.walk('./' + namespace, { followLinks: false, filters: ['node_modules'] });
 
   walker.on('file', function(root, fileStats, next) {
+    ns = fileStats.name === 'package.json' ? namespace.replace(/ /g, "\-") : namespace
     parseFile(root + '/' + fileStats.name, {
-      namespace: namespace,
+      namespace: ns,
       description: args['-i'].split(':')[2] || 'project template',
       version: args['-i'].split(':')[3] || '1.0.0'
     });
@@ -131,7 +129,6 @@ function copyStaticFiles(onComplete) {
       onComplete();
     });
   });
-
 }
 
 function showLoading(message) {
