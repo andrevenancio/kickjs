@@ -46,6 +46,9 @@ function init() {
         log.success('static files copied');
         installNpmDependencies(function() {
           log.success('npm dependencies installed');
+          compileGrunt(function(){
+            log.success('grunt compiled');
+          });
         });
       });
     })
@@ -82,6 +85,14 @@ function copyTemplate(onComplete) {
 function installNpmDependencies(onComplete) {
   showLoading('please wait');
   bash('npm install --prefix ./' + namespace.replace(/ /g, "\\ "), function() {
+    hideLoading();
+    onComplete();
+  });
+}
+
+function compileGrunt(onComplete) {
+  showLoading('please wait');
+  bash('cd ' + namespace.replace(/ /g, "\\ ") + '; grunt', function() {
     hideLoading();
     onComplete();
   });
