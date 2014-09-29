@@ -23,11 +23,20 @@ module.exports = (grunt) ->
                     noCache: false
             app:
                 files:
-                    'website/css/style.css': 'sass/style.sass'  
+                    'website/css/style.css': 'sass/style.sass'
+
+        #connect
+        connect:
+            server:
+                options:
+                    port: 9000,
+                    base: 'website/'
+
 
     grunt.loadNpmTasks 'grunt-coffee-percolator-v2'
     grunt.loadNpmTasks 'grunt-contrib-watch'
     grunt.loadNpmTasks 'grunt-contrib-sass'
+    grunt.loadNpmTasks 'grunt-contrib-connect'
 
     grunt.registerTask 'default', ['percolator:app', 'sass:app']
-    grunt.registerTask 'app', ['percolator:app', 'sass:app', 'watch:app']
+    grunt.registerTask 'dev', ['percolator:app', 'sass:app', 'connect', 'watch:app']
