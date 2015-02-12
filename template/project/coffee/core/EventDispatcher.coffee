@@ -31,7 +31,6 @@ class EventDispatcher
             index = listenerArray.indexOf(listener)
             if index isnt -1
                 listenerArray.splice(index, 1)
-          
         null
   
     dispatchEvent: (event) =>

@@ -1,42 +1,49 @@
+# https://www.npmjs.com/package/kickjs
+
 module.exports = (grunt) ->
     grunt.initConfig
 
-        #watch for changes in files
-        watch:
-            app:
-                files: ['Gruntfile.coffee', 'coffee/*coffee', 'coffee/**/*.coffee', 'sass/*.sass']
-                tasks: ['percolator:app', 'sass:app']
+        # grunt-contrib-copy
+        copy:
+            main:
+                files: [{expand: true, flatten: true, src: ['static/**'], dest: 'deploy/', filter: 'isFile'},]
 
-        #compile coffee files
+        # grunt-contrib-watch
+        watch:
+            dev:
+                files: ['Gruntfile.coffee', 'coffee/**/*coffee', 'sass/*.sass']
+                tasks: ['percolator:dev', 'sass:dev']
+
+        # grunt-coffee-percolator-v2
         percolator:
-            app:
+            dev:
                 source: 'coffee'
-                output: 'website/js/app.js'
+                output: 'deploy/js/app.js'
                 main: 'App.coffee'
                 compile: true
                 opts: "--bare"
 
-        #compile sass files
+        # grunt-contrib-sass
         sass:
             dist:
                 options:
                     noCache: false
-            app:
+            dev:
                 files:
-                    'website/css/style.css': 'sass/style.sass'
+                    'deploy/css/style.css': 'sass/style.sass'
 
-        #connect
+        # grunt-contrib-connect
         connect:
             server:
                 options:
-                    port: 9000,
-                    base: 'website/'
+                    port: 8989,
+                    base: 'deploy/'
 
-
-    grunt.loadNpmTasks 'grunt-coffee-percolator-v2'
+    grunt.loadNpmTasks 'grunt-contrib-copy'
     grunt.loadNpmTasks 'grunt-contrib-watch'
+    grunt.loadNpmTasks 'grunt-coffee-percolator-v2'
     grunt.loadNpmTasks 'grunt-contrib-sass'
     grunt.loadNpmTasks 'grunt-contrib-connect'
 
-    grunt.registerTask 'default', ['percolator:app', 'sass:app']
-    grunt.registerTask 'dev', ['percolator:app', 'sass:app', 'connect', 'watch:app']
+    grunt.registerTask 'default', ['copy', 'percolator:dev', 'sass:dev']
+    grunt.registerTask 'dev', ['copy', 'percolator:dev', 'sass:dev', 'connect', 'watch:dev']

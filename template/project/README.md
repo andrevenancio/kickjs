@@ -1,3 +1,3 @@
-__NAMESPACE__ __VERSION__
+__NAMESPACE__
 ====
-__DESCRIPTION__
+kickjs template
