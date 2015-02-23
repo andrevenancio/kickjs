@@ -38,12 +38,24 @@ module.exports = (grunt) ->
                 options:
                     port: 8989,
                     base: 'deploy/'
+        
+        # grunt-closure-compiler
+        'closure-compiler':
+            frontend:
+                closurePath: 'utils/closure-compiler'
+                js: 'deploy/js/app.js'
+                jsOutputFile: 'deploy/js/app.min.js'
+                maxBuffer: 500
+                options:
+                    compilation_level: 'ADVANCED_OPTIMIZATIONS'
+                    language_in: 'ECMASCRIPT5_STRICT'
 
     grunt.loadNpmTasks 'grunt-contrib-copy'
     grunt.loadNpmTasks 'grunt-contrib-watch'
     grunt.loadNpmTasks 'grunt-coffee-percolator-v2'
     grunt.loadNpmTasks 'grunt-contrib-sass'
     grunt.loadNpmTasks 'grunt-contrib-connect'
+    grunt.loadNpmTasks 'grunt-closure-compiler'
 
-    grunt.registerTask 'default', ['copy', 'percolator:dev', 'sass:dev']
+    grunt.registerTask 'default', ['copy', 'percolator:dev', 'sass:dev', 'closure-compiler']
     grunt.registerTask 'dev', ['copy', 'percolator:dev', 'sass:dev', 'connect', 'watch:dev']
