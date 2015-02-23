@@ -29,7 +29,7 @@ if (args['-n']) {
     log.info('Help:');
     log.info('');
     log.help('kickjs -v', '     displays current version');
-    log.help('kickjs -n', '     creates new project. e.g.: kickjs -n:NAME:DESCRIPTION[OPTIONAL]:VERSION[OPTIONAL]');
+    log.help('kickjs -n', '     creates new project. e.g.: kickjs -n:NAME');
 }
 
 function credits() {
