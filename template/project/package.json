@@ -12,7 +12,6 @@
         "grunt-contrib-watch": "~0.5.2",
         "grunt-coffee-percolator-v2": "~0.2.4",
         "grunt-contrib-sass": "~0.7.3",
-        "grunt-contrib-connect": "~0.8.0",
-        "grunt-closure-compiler": "~0.0.21"
+        "grunt-contrib-connect": "~0.8.0"
     }
 }
