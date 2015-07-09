@@ -5,7 +5,7 @@
 	"authors": "Lowww Ltd",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/andrevenancio/kickjs.git"
+		"url": "https://github.com/LowwwLtd/kickjs.git"
 	},
 	"devDependencies": {
 		"grunt": "~0.4.5",
