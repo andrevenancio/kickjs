@@ -13,10 +13,11 @@ Run the npm install command with the -g option:
 npm install -g kickjs
 ```
 ## Features
-|                                        | Default            |
-| -------------------------------------- | ------------------ |
-| [grunt.js](http://gruntjs.com/)        | :heavy_check_mark: |
-| [sass](http://sass-lang.com/)          | :heavy_check_mark: |
+|                                        | Default            | Three.js           |
+| -------------------------------------- | ------------------ | ------------------ |
+| [grunt.js](http://gruntjs.com/)        | :heavy_check_mark: | :heavy_check_mark: |
+| [sass](http://sass-lang.com/)          | :heavy_check_mark: | :heavy_check_mark: |
+| [CoffeeScript](http://coffeescript.org/)|                   | :heavy_check_mark: |
 
 ## Create a new project
 
