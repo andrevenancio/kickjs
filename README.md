@@ -1,6 +1,4 @@
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
-
-# ![alt text][logo] kickjs
+# kickjs
 
 Boilerplate templates for quick prototyping. <br/>
 [kickjs](https://www.npmjs.com/package/kickjs) allows you to quickly start a new project from a command line instruction.
