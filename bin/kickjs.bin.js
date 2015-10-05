@@ -47,13 +47,10 @@ function init() {
 		log.success( template, 'template copied' );
 		updateFileReferences( function() {
 			log.success( 'file references changed' );
-			copyStaticFiles( function() {
-				log.success( 'static files copied' );
-				installNpmDependencies( function() {
-					log.success( 'npm dependencies installed' );
-					compileGrunt( function() {
-						log.success( 'done.' );
-					} );
+			installNpmDependencies( function() {
+				log.success( 'npm dependencies installed' );
+				compileGrunt( function() {
+					log.success( 'done.' );
 				} );
 			} );
 		} );
@@ -136,12 +133,6 @@ function parseFile( file, references ) {
 		fs.writeFile( file, result, 'utf8', function( err ) {
 			if ( err ) return log.fail( err );
 		} );
-	} );
-}
-
-function copyStaticFiles( onComplete ) {
-	bash( 'cp -r ' + process.cwd() + '/source/static/ ' + process.cwd() + '/deploy', function() {
-		onComplete();
 	} );
 }
 
