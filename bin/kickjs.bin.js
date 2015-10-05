@@ -74,8 +74,8 @@ function copyTemplate( onComplete ) {
 
 	if ( fs.existsSync( templatePath ) ) {
 		clearFolder( function() {
-			bash( 'cp -R ' + templatePath + '"/ ' + process.cwd() + '"', function() {
-				bash( 'cp -R ' + corePath + '"/ ' + process.cwd() + '"', function() {
+			bash( 'cp -R ' + templatePath + '/ "' + process.cwd() + '"', function() {
+				bash( 'cp -R ' + corePath + '/ "' + process.cwd() + '"', function() {
 					onComplete();
 				} );
 			} );
