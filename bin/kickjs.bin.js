@@ -140,10 +140,8 @@ function parseFile( file, references ) {
 }
 
 function copyStaticFiles( onComplete ) {
-	bash( 'mkdir deploy', function() {
-		bash( 'cp -r ' + process.cwd() + '/source/static/ ' + process.cwd() + '/deploy', function() {
-			onComplete();
-		} );
+	bash( 'cp -r ' + process.cwd() + '/source/static/ ' + process.cwd() + '/deploy', function() {
+		onComplete();
 	} );
 }
 
