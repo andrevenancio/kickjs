@@ -16,7 +16,7 @@ module.exports = function( grunt ) {
 		// grunt-contrib-watch
 		watch: {
 			dev: {
-				files: [ 'Gruntfile.js', '<%= settings.source %>sass/*.sass' ],
+				files: [ 'Gruntfile.js', '<%= settings.source %>sass/*.sass', '<%= settings.source %>coffee/*.coffee' ],
 				tasks: [ 'sass:dev', 'percolator:dev' ]
 			}
 		},
@@ -26,7 +26,7 @@ module.exports = function( grunt ) {
             dev: {
                 source: 'source/coffee',
                 output: 'deploy/js/app.js',
-                main: 'App.coffee',
+                main: 'Main.coffee',
                 compile: true,
                 opts: '--bare',
             }
@@ -51,55 +51,8 @@ module.exports = function( grunt ) {
 		connect: {
 			server: {
 				options: {
-					port: 8989,
+					port: 0,
 					base: '<%= settings.deploy %>'
-				}
-			}
-		},
-
-		// grunt-contrib-cssmin
-		cssmin: {
-			options: {
-				shorthandCompacting: false,
-				roundingPrecision: -1
-			},
-			target: {
-				files: {
-					'<%= settings.deploy %>css/style.min.css': [ '<%= settings.deploy %>css/style.css' ]
-				}
-			}
-		},
-
-		// grunt-contrib-uglify
-		uglify: {
-			options: {
-				banner: '<%= settings.credits %>',
-				compress: {
-					drop_console: true
-				}
-			},
-			my_target: {
-				files: {
-					'<%= settings.deploy %>js/app.min.js': [ '<%= settings.deploy %>js/app.js' ]
-				}
-			}
-		},
-
-		// grunt-targethtml
-		targethtml: {
-			deploy: {
-				options: {
-					curlyTags: {
-						rlsdate: '<%= grunt.template.today("yyyymmdd ") %>'
-					}
-				},
-				files: {
-					'<%= settings.deploy %>index.html': '<%= settings.source %>static/index.html'
-				}
-			},
-			dev: {
-				files: {
-					'<%= settings.deploy %>index.html': '<%= settings.source %>static/index.html'
 				}
 			}
 		}
@@ -111,12 +64,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-coffee-percolator-v2' );
 	grunt.loadNpmTasks( 'grunt-contrib-sass' );
 	grunt.loadNpmTasks( 'grunt-contrib-connect' );
-	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
-	grunt.loadNpmTasks( 'grunt-targethtml' );
 
 	// task(s).
-	grunt.registerTask( 'default', [ 'targethtml:dev', 'percolator:dev', 'uglify', 'sass:dev', 'cssmin' ] );
-	grunt.registerTask( 'dev', [ 'targethtml:dev', 'percolator:dev', 'sass:dev', 'connect', 'watch:dev' ] );
+	grunt.registerTask( 'default', [] );
+	grunt.registerTask( 'dev', [ 'percolator:dev', 'sass:dev', 'connect', 'watch:dev' ] );
 
 };

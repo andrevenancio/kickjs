@@ -1,12 +1,9 @@
 ###
 __TITLE__
-@author: Your Name [your-email@yourdomain.com]
 ###
-
 class App
-    
+
     constructor: ->
-        console.log 'kickjs __TYPE__ template'
 
         @scene = new THREE.Scene()
 
@@ -35,5 +32,4 @@ class App
         @mesh.rotation.y += 0.02
 
         @renderer.render @scene, @camera
-
-window.app = new App()
+        null

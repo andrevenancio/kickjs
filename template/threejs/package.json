@@ -12,9 +12,6 @@
 		"grunt-contrib-watch": "~0.6.1",
 		"grunt-coffee-percolator-v2": "~0.2.4",
 		"grunt-contrib-sass": "~0.9.2",
-		"grunt-contrib-connect": "~0.10.1v",
-		"grunt-targethtml": "~0.2.6",
-		"grunt-contrib-cssmin": "~0.12.3",
-		"grunt-contrib-uglify": "~0.9.1"
+		"grunt-contrib-connect": "~0.10.1v"
 	}
 }
