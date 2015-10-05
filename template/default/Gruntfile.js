@@ -56,53 +56,6 @@ module.exports = function( grunt ) {
 					base: '<%= settings.deploy %>'
 				}
 			}
-		},
-
-		// grunt-contrib-cssmin
-		cssmin: {
-			options: {
-				shorthandCompacting: false,
-				roundingPrecision: -1
-			},
-			target: {
-				files: {
-					'<%= settings.deploy %>css/style.min.css': [ '<%= settings.deploy %>css/style.css' ]
-				}
-			}
-		},
-
-		// grunt-contrib-uglify
-		uglify: {
-			options: {
-				banner: '<%= settings.credits %>',
-				compress: {
-					drop_console: true
-				}
-			},
-			my_target: {
-				files: {
-					'<%= settings.deploy %>js/app.min.js': [ '<%= settings.deploy %>js/app.js' ]
-				}
-			}
-		},
-
-		// grunt-targethtml
-		targethtml: {
-			deploy: {
-				options: {
-					curlyTags: {
-						rlsdate: '<%= grunt.template.today("yyyymmdd ") %>'
-					}
-				},
-				files: {
-					'<%= settings.deploy %>index.html': '<%= settings.source %>static/index.html'
-				}
-			},
-			dev: {
-				files: {
-					'<%= settings.deploy %>index.html': '<%= settings.source %>static/index.html'
-				}
-			}
 		}
 
 	} );
@@ -112,12 +65,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks( 'grunt-contrib-concat' );
 	grunt.loadNpmTasks( 'grunt-contrib-sass' );
 	grunt.loadNpmTasks( 'grunt-contrib-connect' );
-	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
-	grunt.loadNpmTasks( 'grunt-targethtml' );
 
 	// task(s).
-	grunt.registerTask( 'default', [ 'targethtml:dev', 'concat', 'uglify', 'sass:dev', 'cssmin' ] );
-	grunt.registerTask( 'dev', [ 'targethtml:dev', 'concat', 'sass:dev', 'connect', 'watch:dev' ] );
+	grunt.registerTask( 'default', [] );
+	grunt.registerTask( 'dev', [ 'concat', 'sass:dev', 'connect', 'watch:dev' ] );
 
 };
