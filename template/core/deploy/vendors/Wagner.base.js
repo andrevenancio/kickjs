@@ -1,3 +1,4 @@
+/* eslint-disable */
 WAGNER.BlendPass = function() {
 
 	WAGNER.Pass.call( this );
@@ -962,6 +963,75 @@ WAGNER.DOFPass.prototype.run = function( c ) {
 	c.pass( this.shader );
 
 	this.shader.uniforms.delta.value.set( 0, 1 );
+	c.pass( this.shader );
+
+}
+
+WAGNER.BadTVPass = function() {
+	WAGNER.Pass.call( this );
+	WAGNER.log( 'BadTVPass test' );
+	this.loadShader('bad-tv.glsl');
+
+	this.params.distortion = 3;
+	this.params.distortion2 = 4;
+	this.params.speed = 0.2;
+	this.params.rollSpeed = 0.1;
+}
+
+WAGNER.BadTVPass.prototype = Object.create( WAGNER.Pass.prototype );
+
+WAGNER.BadTVPass.prototype.run = function( c ) {
+
+	this.shader.uniforms.distortion.value = this.params.distortion;
+	this.shader.uniforms.distortion2.value = this.params.distortion2;
+	this.shader.uniforms.speed.value = this.params.speed;
+	this.shader.uniforms.rollSpeed.value = this.params.rollSpeed;
+
+	c.pass( this.shader );
+
+}
+
+WAGNER.RGBShiftPass = function() {
+	WAGNER.Pass.call( this );
+	WAGNER.log( 'RGBShiftPass test' );
+	this.loadShader('rgb-shift.glsl');
+
+	this.params.amount = 0.005;
+	this.params.angle = 0;
+}
+
+WAGNER.RGBShiftPass.prototype = Object.create( WAGNER.Pass.prototype );
+
+WAGNER.RGBShiftPass.prototype.run = function( c ) {
+
+	this.shader.uniforms.amount.value = this.params.amount;
+	this.shader.uniforms.angle.value = this.params.angle;
+
+	c.pass( this.shader );
+
+}
+
+WAGNER.FilmShaderPass = function() {
+	WAGNER.Pass.call( this );
+	WAGNER.log( 'FilmShaderPass test' );
+	this.loadShader('film-shader.glsl');
+
+	this.params.nIntensity = 0.5;
+	this.params.sIntensity = 0.05;
+	this.params.sCount = 4096;
+	this.params.grayscale = 1;
+
+}
+
+WAGNER.FilmShaderPass.prototype = Object.create( WAGNER.Pass.prototype );
+
+WAGNER.FilmShaderPass.prototype.run = function( c ) {
+
+	this.shader.uniforms.nIntensity.value = this.params.nIntensity;
+	this.shader.uniforms.sIntensity.value = this.params.sIntensity;
+	this.shader.uniforms.sCount.value = this.params.sCount;
+	this.shader.uniforms.grayscale.value = this.params.grayscale;
+
 	c.pass( this.shader );
 
 }

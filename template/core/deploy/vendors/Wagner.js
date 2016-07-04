@@ -1,5 +1,4 @@
-(function() {
-
+/* eslint-disable */
 'use strict';
 
 var WAGNER = WAGNER || {};
@@ -92,7 +91,7 @@ WAGNER.Composer.prototype.toScreen = function() {
 
 	if( this.copyPass.isLoaded() ) {
 		this.quad.material = this.copyPass.shader;
-		this.quad.material.uniforms.tInput.value = this.read;
+		this.quad.material.uniforms.tInput.value = this.read.texture;
 		this.quad.material.uniforms.resolution.value.set( this.width, this.height );
 		this.renderer.render( this.scene, this.camera );
 	}
@@ -103,7 +102,7 @@ WAGNER.Composer.prototype.toTexture = function( t ) {
 
 	if( this.copyPass.isLoaded() ) {
 		this.quad.material = this.copyPass.shader;
-		this.quad.material.uniforms.tInput.value = this.read;
+		this.quad.material.uniforms.tInput.value = this.read.texture;
 		this.renderer.render( this.scene, this.camera, t, false );
 	}
 
@@ -129,7 +128,7 @@ WAGNER.Composer.prototype.pass = function( pass ) {
 			return;
 		}
 
-		if( !pass.isSim ) this.quad.material.uniforms.tInput.value = this.read;
+		if( !pass.isSim ) this.quad.material.uniforms.tInput.value = this.read.texture;
 
 		this.quad.material.uniforms.resolution.value.set( this.width, this.height );
 		this.quad.material.uniforms.time.value = 0.001 * ( Date.now() - this.startTime );
@@ -164,7 +163,7 @@ WAGNER.Composer.prototype.setSource = function( src ) {
 
 	if( this.copyPass.isLoaded() ) {
 		this.quad.material = this.copyPass.shader;
-		this.quad.material.uniforms.tInput.value = src;
+		this.quad.material.uniforms.tInput.value = src.texture;
 		this.renderer.render( this.scene, this.camera, this.write, true );
 		this.swapBuffers();
 	}
@@ -624,9 +623,4 @@ WAGNER.ShadersPool.prototype.extendParams = function(target, source) {
 
 }
 
-
-
-
-
 window.WAGNER = WAGNER;
-})();

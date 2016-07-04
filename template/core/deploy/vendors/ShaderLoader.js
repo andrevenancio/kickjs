@@ -1,5 +1,6 @@
+/* eslint-disable */
 var ShaderLoader = function() {
-	
+
 	this.loaded = 0;
 	this.toLoad = 0;
 	this.shaders = {};
@@ -67,7 +68,7 @@ ShaderLoader.prototype.get = function( id ) {
 	if( !s ) {
 		throw new ShaderLoaderGetException( id );
 		return;
-	} 
+	}
 
 	return s.content;
 
