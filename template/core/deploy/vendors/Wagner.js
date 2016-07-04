@@ -111,11 +111,9 @@ WAGNER.Composer.prototype.toTexture = function( t ) {
 WAGNER.Composer.prototype.pass = function( pass ) {
 
 	if( pass instanceof WAGNER.Stack ) {
-
 		this.passStack(pass);
 
 	} else {
-
 		if( typeof pass === 'string' ) {
 			this.quad.material = this.passes[ pass ];
 		}
@@ -129,7 +127,6 @@ WAGNER.Composer.prototype.pass = function( pass ) {
 		}
 
 		if( !pass.isSim ) this.quad.material.uniforms.tInput.value = this.read.texture;
-
 		this.quad.material.uniforms.resolution.value.set( this.width, this.height );
 		this.quad.material.uniforms.time.value = 0.001 * ( Date.now() - this.startTime );
 		this.renderer.render( this.scene, this.camera, this.write, false );

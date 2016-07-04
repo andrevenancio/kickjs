@@ -382,12 +382,12 @@ WAGNER.MultiPassBloomPass.prototype.run = function( c ) {
 
 	if( this.params.useTexture === true ) {
 		this.blendPass.params.mode = WAGNER.BlendMode.Screen;
-		this.blendPass.params.tInput = this.params.glowTexture;
+		this.blendPass.params.tInput = this.params.glowTexture.texture;
 		c.pass( this.blendPass );
 	}
 
 	this.blendPass.params.mode = this.params.blendMode;
-	this.blendPass.params.tInput2 = this.composer.output;
+	this.blendPass.params.tInput2 = this.composer.output.texture;
 	c.pass( this.blendPass );
 
 };
