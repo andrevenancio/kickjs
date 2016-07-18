@@ -1,7 +1,7 @@
 {
     "name": "kickjs",
     "preferGlobal": true,
-    "version": "2.3.0",
+    "version": "2.4.0",
     "author": "Andre Venancio <andre@lowwwltd.com>",
     "description": "Boilerplate templates for quick prototyping",
     "bin": {

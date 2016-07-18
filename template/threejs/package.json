@@ -3,6 +3,7 @@
 	"version": "1.0.0",
 	"description": "__DESCRIPTION__",
 	"authors": "Lowww Ltd",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/LowwwLtd/kickjs.git"
@@ -12,6 +13,11 @@
 		"grunt-contrib-watch": "~0.6.1",
 		"grunt-coffee-percolator-v2": "~0.2.4",
 		"grunt-contrib-sass": "~0.9.2",
-		"grunt-contrib-connect": "~0.10.1v"
+		"grunt-contrib-connect": "~0.10.1v",
+		"grunt-contrib-uglify": "~0.10.1",
+		"grunt-contrib-copy": "~0.8.2",
+		"grunt-contrib-cssmin": "~1.0.1",
+		"grunt-contrib-clean": "~1.0.0",
+		"grunt-contrib-rename": "~0.0.3"
 	}
 }
