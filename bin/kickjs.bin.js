@@ -28,7 +28,7 @@ var validation = {
 validation[q] = {
     pattern: /^(?:y|n)+$/,
     message: 'Type y or n.',
-    required: true
+    required: false
 }
 
 console.log('');
@@ -103,16 +103,13 @@ function installNpmDependencies(onComplete) {
 
 
 function updateFileReferences(onComplete) {
-    var files = 0;
-
-    var walker = walk.walk('.', {
+    var walker = walk.walk('./' + title, {
         followLinks: false,
         filters: ['node_modules']
     });
 
     walker.on('file', function(root, fileStats, next) {
         parseFile(root + '/' + fileStats.name);
-        files++;
         next();
     });
 

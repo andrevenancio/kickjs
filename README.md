@@ -15,7 +15,7 @@ npm install -g kickjs
 ```
 
 ## Template
-The generated template already comes with a few libraries ([dat.gui.js](https://github.com/dataarts/dat.gui), [stats.js](https://github.com/mrdoob/stats.js), [microphysics.js](https://github.com/jeromeetienne/microphysics.js) and [renderstats.js](https://github.com/jeromeetienne/threex.rendererstats))
+The generated template already comes with a few libraries ([dat.gui.js](https://github.com/dataarts/dat.gui), [stats.js](https://github.com/mrdoob/stats.js), [microphysics.js](https://github.com/jeromeetienne/microphysics.js), [three.js](https://github.com/mrdoob/three.js) and [renderstats.js](https://github.com/jeromeetienne/threex.rendererstats))
 
 You can add files/folders to the `source/static` folder, and it will be automatically copied to your destination folder.
 
