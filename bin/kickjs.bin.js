@@ -1,103 +1,106 @@
 #!/usr/bin/env node
-
-var log = require('../lib/log');
 var pkg = require('../package.json');
-
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
 var walk = require('walk');
+var prompt = require('prompt');
+var colors = require('colors/safe');
 
 var interval = null;
-var template = '';
+var template = 'default';
 var title = '';
 var description = '';
+var i = 0;
+var startTime = 0;
 
-var args = {};
-
-for (var i = 0; i < process.argv.length; i++) {
-    var arg = process.argv[i];
-    args[arg.split(':')[0]] = arg;
+var q = 'install npm modules? (y/n)';
+var validation = {
+    title: {
+        pattern: /^[a-zA-Z0-9\s\-]+$/,
+        message: 'Name must be letters, numbers, spaces or dashes',
+        required: true
+    },
+    description: {
+        required: false
+    }
+};
+validation[q] = {
+    pattern: /^(?:y|n)+$/,
+    message: 'Type y or n.',
+    required: true
 }
 
-if (args['-n']) {
-    template = args['-n'].split(':')[1] || 'default';
-    title = args['-n'].split(':')[2] || 'kickjs';
-    description = args['-n'].split(':')[3] || ('kickjs ' + template + 'template');
-    init();
-} else if (args['-v']) {
-    log.info(pkg.version);
-} else {
-    credits();
-    log.info('');
-    log.info('Help:');
-    log.help('-v', '     displays current version');
-    log.help('-n', '     creates new project. e.g.: kickjs -n:coffee');
-}
+console.log('');
+console.log(colors.cyan('kickjs'), pkg.version);
+console.log(colors.gray('Please enter your project details:'));
+prompt.start();
+prompt.message = '';
+prompt.get({
+    properties: validation
+}, function(err, result) {
+    if (!err) {
+        title = result.title;
+        description = result.description;
+        init(result[q] === 'y');
+    }
+});
 
-function credits() {
-    log.clear();
-    log.info('kickjs', pkg.version);
-}
+function init(npmInstall) {
+    startTime = Date.now();
 
-function init() {
-    credits();
-
-    copyTemplate(function() {
-        log.success(template, 'template copied');
-        updateFileReferences(function() {
-            log.success('file references changed');
-            installNpmDependencies(function() {
-                log.success('npm dependencies installed');
-                compileGrunt(function() {
-                    log.success('done.');
+    clearFolder(function() {
+        createDirectory(function() {
+            copyTemplate(function() {
+                updateFileReferences(function() {
+                    if (npmInstall) {
+                        installNpmDependencies(function() {
+                            end();
+                        });
+                    } else {
+                        end();
+                    }
                 });
             });
         });
+    })
+}
+
+function end() {
+    console.log('');
+    console.log(colors.gray('completed in'), colors.green(Number(Date.now() - startTime) + 'ms'));
+}
+
+function createDirectory(onComplete) {
+    bash('mkdir "' + title + '"', function(e) {
+        onComplete();
     });
 }
 
 function clearFolder(onComplete) {
-    bash('rm -rf *', function(e) {
-        log.success('directory clear');
+    bash('rm -rf "' + title + '"', function(e) {
         onComplete();
     });
 }
 
 function copyTemplate(onComplete) {
-
     var templatePath = path.join(__dirname, '..', 'template', template);
-    var corePath = path.join(__dirname, '..', 'template', 'core');
 
     if (fs.existsSync(templatePath)) {
-        clearFolder(function() {
-            bash('cp -R ' + templatePath + '/ "' + process.cwd() + '"', function() {
-                bash('cp -R ' + corePath + '/ "' + process.cwd() + '"', function() {
-                    onComplete();
-                });
-            });
+        bash('cp -R ' + templatePath + '/ "' + process.cwd() + '/' + title + '"', function() {
+            onComplete();
         });
-
-    } else {
-        log.fail('unknown template.');
     }
 }
 
 function installNpmDependencies(onComplete) {
-    showLoading('please wait');
-    bash('npm install --prefix .', function() {
+    showLoading();
+    bash('cd "' + title + '" && npm install --prefix .', function() {
         hideLoading();
         onComplete();
     });
 }
 
-function compileGrunt(onComplete) {
-    showLoading('please wait');
-    bash('grunt', function() {
-        hideLoading();
-        onComplete();
-    });
-}
 
 function updateFileReferences(onComplete) {
     var files = 0;
@@ -108,10 +111,7 @@ function updateFileReferences(onComplete) {
     });
 
     walker.on('file', function(root, fileStats, next) {
-        var ns = fileStats.name === 'package.json' ? template.replace(/ /g, "\\-") : template;
-        parseFile(root + '/' + fileStats.name, {
-            template: ns
-        });
+        parseFile(root + '/' + fileStats.name);
         files++;
         next();
     });
@@ -121,24 +121,23 @@ function updateFileReferences(onComplete) {
     });
 }
 
-function parseFile(file, references) {
+function parseFile(file) {
     fs.readFile(file, 'utf8', function(err, data) {
-        if (err) return log.failt(err);
+        if (err) return console.logt(err);
 
         var result = data
-            .replace(/__TYPE__/g, references.template)
-            .replace(/__TITLE__/g, title)
+            .replace(/__TITLE__/g, title.replace(/ /g, "\-"))
             .replace(/__DESCRIPTION__/g, description);
 
         fs.writeFile(file, result, 'utf8', function(err) {
-            if (err) return log.fail(err);
+            if (err) return console.log(err);
         });
     });
 }
 
-function showLoading(message) {
+function showLoading() {
     interval = setInterval(function() {
-        updateLoading(message);
+        updateLoading('please wait');
     }, 300);
 }
 
@@ -159,7 +158,7 @@ function hideLoading() {
 function bash(script, onSuccess) {
     child_process.exec(script, function(error, stdout, stderr) {
         if (error) {
-            return log.fail(error);
+            return console.log(error);
         } else {
             return onSuccess();
         }
