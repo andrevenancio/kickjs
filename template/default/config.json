@@ -1,9 +1,0 @@
-{
-    "title": "__TITLE__",
-    "description": "__DESCRIPTION__",
-    "ga": "UA-XXXXXXXX-X",
-    "vendors": [
-        "dat.gui.js",
-        "stats.js"
-    ]
-}

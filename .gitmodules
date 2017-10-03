@@ -1,0 +1,3 @@
+[submodule "kickjs-templates"]
+	path = kickjs-templates
+	url = https://github.com/andrevenancio/kickjs-templates.git
