@@ -1,163 +1,156 @@
 #!/usr/bin/env node
-var pkg = require('../package.json');
-var child_process = require('child_process');
-var fs = require('fs');
-var path = require('path');
-var walk = require('walk');
-var prompt = require('prompt');
-var colors = require('colors/safe');
+const pkg = require('../package.json');
+const childProcess = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const walk = require('walk');
+const prompt = require('prompt');
+const colors = require('colors/safe');
 
-var interval = null;
-var template = 'default';
-var title = '';
-var description = '';
-var i = 0;
-var startTime = 0;
+let title = '';
+let description = '';
+let template = '';
 
-var q = 'install npm modules? (y/n)';
-var validation = {
-    title: {
-        pattern: /^[a-zA-Z0-9\s\-]+$/,
-        message: 'Name must be letters, numbers, spaces or dashes',
-        required: true
-    },
-    description: {
-        required: false
-    }
-};
-validation[q] = {
-    pattern: /^(?:y|n)+$/,
-    message: 'Type y or n.',
-    required: false
-}
+let startTime = 0;
 
-console.log('');
-console.log(colors.cyan('kickjs'), pkg.version);
-console.log(colors.gray('Please enter your project details:'));
-prompt.start();
-prompt.message = '';
-prompt.get({
-    properties: validation
-}, function(err, result) {
-    if (!err) {
-        title = result.title;
-        description = result.description;
-        init(result[q] === 'y');
-    }
-});
-
-function init(npmInstall) {
-    startTime = Date.now();
-
-    clearFolder(function() {
-        createDirectory(function() {
-            copyTemplate(function() {
-                updateFileReferences(function() {
-                    if (npmInstall) {
-                        installNpmDependencies(function() {
-                            end();
-                        });
-                    } else {
-                        end();
-                    }
-                });
-            });
-        });
-    })
-}
-
-function end() {
-    console.log('');
-    console.log(colors.gray('completed in'), colors.green(Number(Date.now() - startTime) + 'ms'));
-}
-
-function createDirectory(onComplete) {
-    bash('mkdir "' + title + '"', function(e) {
-        onComplete();
+// --------------------------------------------------------------- AUX functions
+function bash(script, onSuccess) {
+    childProcess.exec(script, (error) => {
+        if (error) {
+            return console.log(error);
+        }
+        return onSuccess();
     });
 }
 
 function clearFolder(onComplete) {
-    bash('rm -rf "' + title + '"', function(e) {
+    bash(`rm -rf ${title}`, () => {
+        onComplete();
+    });
+}
+
+function createDirectory(onComplete) {
+    bash(`mkdir ${title}`, () => {
         onComplete();
     });
 }
 
 function copyTemplate(onComplete) {
-    var templatePath = path.join(__dirname, '..', 'template', template);
+    const templatePath = path.join(__dirname, '..', 'kickjs-templates', template);
 
     if (fs.existsSync(templatePath)) {
-        bash('cp -R ' + templatePath + '/ "' + process.cwd() + '/' + title + '"', function() {
+        bash(`cp -R ${templatePath}/ ${process.cwd()}/${title}`, () => {
             onComplete();
         });
+    } else {
+        console.log(colors.red('template not found'), colors.gray(templatePath));
     }
 }
 
-function installNpmDependencies(onComplete) {
-    showLoading();
-    bash('cd "' + title + '" && npm install --prefix .', function() {
-        hideLoading();
-        onComplete();
+function parseFile(file) {
+    fs.readFile(file, 'utf8', (err1, data) => {
+        if (err1) return console.logt(err1);
+
+        const result = data
+            .replace(/__TITLE__/g, title.replace(/ /g, '-'))
+            .replace(/__DESCRIPTION__/g, description);
+
+        fs.writeFile(file, result, 'utf8', (err2) => {
+            if (err2) {
+                console.log(err2);
+            }
+            return false;
+        });
+        return false;
     });
 }
 
-
 function updateFileReferences(onComplete) {
-    var walker = walk.walk('./' + title, {
+    const walker = walk.walk(`./${title}`, {
         followLinks: false,
-        filters: ['node_modules']
+        filters: ['node_modules'],
     });
 
-    walker.on('file', function(root, fileStats, next) {
-        parseFile(root + '/' + fileStats.name);
+    walker.on('file', (root, fileStats, next) => {
+        parseFile(`${root}/${fileStats.name}`);
         next();
     });
 
-    walker.on('end', function() {
+    walker.on('end', () => {
         onComplete();
     });
 }
 
-function parseFile(file) {
-    fs.readFile(file, 'utf8', function(err, data) {
-        if (err) return console.logt(err);
+function end() {
+    console.log('');
+    console.log(colors.gray('completed in'), colors.green(`${Number(Date.now() - startTime)}ms`));
+}
 
-        var result = data
-            .replace(/__TITLE__/g, title.replace(/ /g, "\-"))
-            .replace(/__DESCRIPTION__/g, description);
+// ------------------------------------------------------------------------ INIT
+function init() {
+    startTime = Date.now();
 
-        fs.writeFile(file, result, 'utf8', function(err) {
-            if (err) return console.log(err);
+    clearFolder(() => {
+        createDirectory(() => {
+            copyTemplate(() => {
+                updateFileReferences(() => {
+                    end();
+                });
+            });
         });
     });
 }
 
-function showLoading() {
-    interval = setInterval(function() {
-        updateLoading('please wait');
-    }, 300);
-}
+// HERE
+const step1 = {
+    title: {
+        pattern: /^[a-zA-Z0-9\s-]+$/,
+        message: 'Name must be letters, numbers, spaces or dashes.',
+        required: true,
+    },
+    description: {
+        required: false,
+    },
+};
 
-function updateLoading(msn) {
-    process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-    i = (i + 1) % 5;
-    var dots = new Array(i + 1).join(".");
-    process.stdout.write(msn + dots);
-}
+const step2 = {
+    template: {
+        pattern: /^[0-9\s]+$/,
+        message: 'Only numbers are allowed.',
+        required: true,
+    },
+};
 
-function hideLoading() {
-    clearInterval(interval);
-    process.stdout.clearLine();
-    process.stdout.cursorTo(0);
-}
+console.log('');
+console.log(colors.cyan('kickjs'), pkg.version);
+console.log(colors.gray('Please enter your project details:'));
 
-function bash(script, onSuccess) {
-    child_process.exec(script, function(error, stdout, stderr) {
-        if (error) {
-            return console.log(error);
-        } else {
-            return onSuccess();
-        }
-    });
-}
+prompt.start();
+prompt.message = '';
+prompt.get({
+    properties: step1,
+}, (err, result1) => {
+    if (!err) {
+        title = result1.title;
+        description = result1.description;
+
+        console.log('');
+        console.log(colors.gray('Please select the template:'));
+        console.log(colors.cyan('(1)'), colors.gray('default'), colors.cyan('(2)'), colors.gray('react'));
+        prompt.get({ properties: step2 }, (error, result2) => {
+            switch (result2.template) {
+                case '1':
+                    template = 'default';
+                    break;
+                case '2':
+                    template = 'react';
+                    break;
+                default:
+                    console.log(colors.red('invalid template:'), colors.gray('using default template'));
+                    template = 'default';
+
+            }
+            init();
+        });
+    }
+});
