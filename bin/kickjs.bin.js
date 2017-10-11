@@ -136,7 +136,7 @@ prompt.get({
 
         console.log('');
         console.log(colors.gray('Please select the template:'));
-        console.log(colors.cyan('(1)'), colors.gray('default'), colors.cyan('(2)'), colors.gray('react'));
+        console.log(colors.cyan('(1)'), colors.gray('default'), colors.cyan('(2)'), colors.gray('react'), colors.cyan('(3)'), colors.gray('electron/react'));
         prompt.get({ properties: step2 }, (error, result2) => {
             switch (result2.template) {
                 case '1':
@@ -144,6 +144,9 @@ prompt.get({
                     break;
                 case '2':
                     template = 'react';
+                    break;
+                case '2':
+                    template = 'electron';
                     break;
                 default:
                     console.log(colors.red('invalid template:'), colors.gray('using default template'));
