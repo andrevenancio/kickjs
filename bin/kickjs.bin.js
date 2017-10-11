@@ -145,7 +145,7 @@ prompt.get({
                 case '2':
                     template = 'react';
                     break;
-                case '2':
+                case '3':
                     template = 'electron';
                     break;
                 default:

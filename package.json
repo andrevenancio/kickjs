@@ -2,7 +2,7 @@
   "name": "kickjs",
   "description": "Boilerplate templates for quick prototyping",
   "author": "Andre Venancio <info@andrevenancio.com>",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "license": "MIT",
   "repository": "https://github.com/andrevenancio/kickjs",
   "preferGlobal": true,
