@@ -1,20 +1,17 @@
 {
   "name": "kickjs",
-  "preferGlobal": true,
-  "version": "4.0.1",
-  "author": "Andre Venancio <info@andrevenancio.com>",
   "description": "Boilerplate templates for quick prototyping",
+  "author": "Andre Venancio <info@andrevenancio.com>",
+  "version": "4.0.2",
+  "license": "MIT",
+  "repository": "https://github.com/andrevenancio/kickjs",
+  "preferGlobal": true,
   "bin": {
     "kickjs": "./bin/kickjs.bin.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/andrevenancio/kickjs"
-  },
-  "license": "MIT",
   "dependencies": {
     "cli-color": "~0.2.3",
     "colors": "^1.1.2",
