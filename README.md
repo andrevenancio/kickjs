@@ -1,5 +1,8 @@
 # kickjs
-
+<p align="center">
+<a href="https://github.com/andrevenancio/kickjs/blob/develop/LICENCE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="licence"/></a>
+    <a href="https://david-dm.org/andrevenancio/kickjs"><img src="https://david-dm.org/andrevenancio/kickjs.svg" alt="Dependency Status"></a>
+</p>
 kickjs is an ES6 boilerplate template system for quick prototyping.
 It allows you to quickly start a new project simply by typing `kickjs` from your Terminal window.
 You'll be prompted to type the projects `name` (mandatory) and `description` (optional). You can choose several of the built in templates (default, react, electron+react).

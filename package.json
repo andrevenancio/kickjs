@@ -2,10 +2,17 @@
   "name": "kickjs",
   "description": "Boilerplate templates for quick prototyping",
   "author": "Andre Venancio <info@andrevenancio.com>",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "license": "MIT",
   "repository": "https://github.com/andrevenancio/kickjs",
   "preferGlobal": true,
+  "keywords": [
+      "template",
+      "ES6",
+      "react",
+      "electron",
+      "webpack"
+  ],
   "bin": {
     "kickjs": "./bin/kickjs.bin.js"
   },
@@ -13,10 +20,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "cli-color": "~0.2.3",
+    "cli-color": "^1.2.0",
     "colors": "^1.1.2",
-    "ncp": "~0.5.0",
+    "ncp": "^2.0.0",
     "prompt": "^1.0.0",
-    "walk": "2.3.3"
+    "walk": "^2.3.9"
   }
 }
